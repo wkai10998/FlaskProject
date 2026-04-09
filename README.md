@@ -14,7 +14,6 @@ pip install -r requirements.txt
 - http://127.0.0.1:5000/guide
 - http://127.0.0.1:5000/faq
 - http://127.0.0.1:5000/assistant
-- http://127.0.0.1:5000/login
 
 ## 页面结构（课程版）
 - 首页：申请时间路线图
@@ -128,10 +127,10 @@ FlaskProject/
 5. 后端更新 Session 或写入 Supabase，再 `redirect` 回目标页面  
 
 #### 3) 路由与 redirect 讲解点
-- 页面路由（GET）：`/`、`/programs`、`/guide`、`/guide/<stage_slug>`、`/faq`、`/faq/<id>`、`/assistant`、`/login`
+- 页面路由（GET）：`/`、`/programs`、`/guide`、`/guide/<stage_slug>`、`/faq`、`/faq/<id>`、`/assistant`
 - 交互路由（POST）：`/auth/login`、`/auth/register`、`/auth/logout`、`/profile`、`/guide/.../comment`、`/faq/.../comment`、`/guide/.../complete`
 - redirect 典型场景：
-  - 登录失败 -> 重定向回 `/login`
+  - 登录失败 -> 重定向回原页面并自动弹出登录框
   - 注册成功 -> 重定向到首页
   - 评论提交后 -> 重定向回原详情页（避免重复提交）
 

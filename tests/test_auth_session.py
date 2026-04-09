@@ -10,10 +10,10 @@ class AuthSessionTestCase(unittest.TestCase):
     def setUp(self):
         self.client = app_module.app.test_client()
 
-    def test_login_page_exists(self):
+    def test_login_route_redirects_to_modal(self):
         response = self.client.get("/login")
-        self.assertEqual(response.status_code, 200)
-        self.assertIn("登录", response.get_data(as_text=True))
+        self.assertEqual(response.status_code, 302)
+        self.assertIn("/?open_login=1&auth_tab=login", response.location)
 
     def test_login_success_sets_session(self):
         fake_user = {

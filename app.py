@@ -64,7 +64,9 @@ def _clean_redirect_target(raw_url: str, default_endpoint: str = "index") -> str
             return url_for(default_endpoint)
 
     query_items = urllib.parse.parse_qsl(parsed.query, keep_blank_values=True)
-    query_items = [(key, value) for key, value in query_items if key != "open_login"]
+    query_items = [
+        (key, value) for key, value in query_items if key not in {"open_login", "auth_tab"}
+    ]
     cleaned_query = urllib.parse.urlencode(query_items)
 
     return urllib.parse.urlunparse(
@@ -396,7 +398,10 @@ def assistant() -> str:
 
 @app.route("/login")
 def login_page() -> str:
-    return render_template("login.html")
+    next_url = _resolve_next_url(default_endpoint="index")
+    if next_url == url_for("login_page"):
+        next_url = url_for("index")
+    return redirect(_with_open_login_flag(next_url, auth_tab=request.args.get("auth_tab", "login")))
 
 
 # ----------------------------
