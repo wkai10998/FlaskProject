@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+
+{% set title = "常见问题 - 港中文申请一站式助手" %}
+
+{% block body %}
+<section>
+  <h1 class="text-2xl font-bold text-slate-900">常见问题</h1>
+  <p class="text-slate-600 mt-2">先看高频问题，再进入详情页评论交流。</p>
+
+  <div class="mt-5">
+    <input id="faq-search" type="text" placeholder="输入关键词筛选问题..." class="w-full md:w-[28rem] rounded-lg border border-slate-300 bg-white px-3 py-2 text-sm">
+  </div>
+
+  <div id="faq-list" class="mt-6 space-y-4">
+    {% for item in faqs %}
+      <article class="faq-item rounded-xl border border-slate-200 bg-white p-5 shadow-sm" data-question="{{ item.question }}" data-answer="{{ item.answer }}" data-category="{{ item.category }}">
+        <div class="text-xs text-slate-400">{{ item.category }}</div>
+        <h2 class="mt-1 text-lg font-semibold text-slate-900">{{ item.question }}</h2>
+        <p class="mt-2 text-sm text-slate-600">{{ item.answer }}</p>
+        <a href="{{ url_for('faq_detail', faq_id=item.id) }}" class="inline-block mt-3 text-sm text-brand-700 hover:text-brand-600">查看详情与评论 →</a>
+      </article>
+    {% endfor %}
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_scripts %}
+<script src="{{ url_for('static', filename='js/faq.js') }}"></script>
+{% endblock %}

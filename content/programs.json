@@ -1,0 +1,52 @@
+[
+  {
+    "id": 1,
+    "name": "MSc in Information Engineering",
+    "school": "Faculty of Engineering",
+    "degree": "MSc",
+    "deadline": "2027-01-15",
+    "language": "IELTS 6.5 / TOEFL 79",
+    "focus": "数据与智能系统",
+    "link": "https://www.cuhk.edu.hk/"
+  },
+  {
+    "id": 2,
+    "name": "MSc in Marketing",
+    "school": "Business School",
+    "degree": "MSc",
+    "deadline": "2026-12-20",
+    "language": "IELTS 6.5",
+    "focus": "市场分析与品牌管理",
+    "link": "https://www.cuhk.edu.hk/"
+  },
+  {
+    "id": 3,
+    "name": "MA in Journalism",
+    "school": "Faculty of Social Science",
+    "degree": "MA",
+    "deadline": "2026-12-10",
+    "language": "IELTS 7.0",
+    "focus": "新闻写作与媒体实践",
+    "link": "https://www.cuhk.edu.hk/"
+  },
+  {
+    "id": 4,
+    "name": "MSc in Finance",
+    "school": "Business School",
+    "degree": "MSc",
+    "deadline": "2027-01-05",
+    "language": "IELTS 6.5",
+    "focus": "公司金融与投资",
+    "link": "https://www.cuhk.edu.hk/"
+  },
+  {
+    "id": 5,
+    "name": "MA in Global Communication",
+    "school": "Faculty of Social Science",
+    "degree": "MA",
+    "deadline": "2026-12-18",
+    "language": "IELTS 6.5",
+    "focus": "国际传播与数字媒体",
+    "link": "https://www.cuhk.edu.hk/"
+  }
+]

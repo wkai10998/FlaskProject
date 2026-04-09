@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% set title = "智能助手 - 港中文申请一站式助手" %}
+
+{% block body %}
+<section>
+  <h1 class="text-2xl font-bold text-slate-900">智能助手（RAG 演示）</h1>
+  <p class="text-slate-600 mt-2">输入申请问题，系统会先检索项目资料，再给出回答和来源。</p>
+
+  <form action="{{ url_for('assistant') }}" method="post" class="mt-6 rounded-xl border border-slate-200 bg-white p-5 shadow-sm space-y-3">
+    <label for="question" class="text-sm font-medium text-slate-700">你的问题</label>
+    <textarea id="question" name="question" rows="4" placeholder="例如：推荐信要提前多久联系老师？" class="w-full rounded-lg border border-slate-300 px-3 py-2 text-sm">{{ question }}</textarea>
+    <button type="submit" class="rounded-lg bg-brand-600 text-white px-4 py-2 text-sm">生成回答</button>
+  </form>
+
+  {% if answer %}
+    <section class="mt-6 grid grid-cols-1 lg:grid-cols-12 gap-5">
+      <article class="lg:col-span-8 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="text-base font-semibold text-slate-900">助手回答</h2>
+        <pre class="mt-3 whitespace-pre-wrap text-sm leading-7 text-slate-700">{{ answer }}</pre>
+      </article>
+
+      <aside class="lg:col-span-4 rounded-xl border border-slate-200 bg-white p-5 shadow-sm">
+        <h2 class="text-base font-semibold text-slate-900">引用来源</h2>
+        {% if sources %}
+          <ul class="mt-3 space-y-2">
+            {% for source in sources %}
+              <li>
+                <a href="{{ source.link }}" class="text-sm text-brand-700 hover:text-brand-600">{{ source.source }}</a>
+              </li>
+            {% endfor %}
+          </ul>
+        {% else %}
+          <p class="mt-3 text-sm text-slate-500">未检索到直接匹配来源，请细化问题后再试。</p>
+        {% endif %}
+      </aside>
+    </section>
+  {% endif %}
+</section>
+{% endblock %}
