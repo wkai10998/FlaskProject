@@ -14,7 +14,7 @@
 - JavaScript 交互（关键词筛选、步骤标记完成）
 - Session（用户昵称、头像色、步骤完成状态）
 - JSON 内容管理（`content/*.json`）
-- SQLite 评论持久化（后续可迁移 Supabase）
+- Supabase 评论持久化（纯 Supabase 模式）
 - 错误处理（404/500）
 
 ## 三、目录亮点

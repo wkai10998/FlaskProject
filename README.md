@@ -29,7 +29,22 @@ cd /Users/wkai/Desktop/FlaskProject
 - Session：昵称、头像色、步骤完成状态
 - 数据层：
   - `content/*.json` 管理静态内容
-  - SQLite 存评论（后续可迁移 Supabase）
+  - 评论直接写入 Supabase（纯 Supabase 模式）
+
+## Supabase 评论配置（第 3 步）
+
+1. 在 Supabase SQL Editor 执行 [supabase_comments.sql](/Users/wkai/Desktop/FlaskProject/docs/supabase_comments.sql)
+2. 复制 [.env.example](/Users/wkai/Desktop/FlaskProject/.env.example) 为 `.env`（或直接导出环境变量）
+3. 启动前设置：
+
+```bash
+export SUPABASE_URL="https://<project-ref>.supabase.co"
+export SUPABASE_SERVICE_ROLE_KEY="<your-service-role-key>"
+```
+
+可选变量：
+- `SUPABASE_ANON_KEY`：未提供 `SUPABASE_SERVICE_ROLE_KEY` 时可用
+- `SUPABASE_COMMENTS_TABLE`：默认 `comments`
 
 ## 目录结构
 
@@ -41,8 +56,10 @@ FlaskProject/
 │   ├── guide_steps.json
 │   ├── programs.json
 │   └── faq.json
-├── data/
-│   └── app.db
+├── docs/
+│   ├── presentation_notes.md
+│   ├── team_split.md
+│   └── supabase_comments.sql
 ├── static/
 │   ├── css/app.css
 │   ├── js/
@@ -65,7 +82,9 @@ FlaskProject/
 │       ├── 404.html
 │       └── 500.html
 ├── utils/
+│   ├── __init__.py
 │   └── content_loader.py
 └── tests/
-    └── test_course_structure.py
+    ├── test_course_structure.py
+    └── test_supabase_comments.py
 ```

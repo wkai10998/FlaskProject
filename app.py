@@ -1,15 +1,16 @@
 from __future__ import annotations
 
+import json
 import os
-import sqlite3
+import urllib.error
+import urllib.parse
+import urllib.request
 from datetime import datetime
-from pathlib import Path
 
 from flask import (
     Flask,
     abort,
     flash,
-    g,
     jsonify,
     make_response,
     redirect,
@@ -23,10 +24,13 @@ from utils.content_loader import get_faqs, get_guides, get_programs, get_stages
 
 app = Flask(__name__)
 app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-secret-change-me")
-
-BASE_DIR = Path(__file__).resolve().parent
-DATA_DIR = BASE_DIR / "data"
-DB_PATH = DATA_DIR / "app.db"
+SUPABASE_URL = os.environ.get("SUPABASE_URL", "").strip().rstrip("/")
+SUPABASE_KEY = (
+    os.environ.get("SUPABASE_SERVICE_ROLE_KEY", "").strip()
+    or os.environ.get("SUPABASE_ANON_KEY", "").strip()
+)
+SUPABASE_COMMENTS_TABLE = os.environ.get("SUPABASE_COMMENTS_TABLE", "comments").strip() or "comments"
+SUPABASE_TIMEOUT_SECONDS = 8
 
 AVATAR_COLORS = {
     "sky": "bg-sky-500",
@@ -35,39 +39,6 @@ AVATAR_COLORS = {
     "rose": "bg-rose-500",
     "violet": "bg-violet-500",
 }
-
-
-def get_db() -> sqlite3.Connection:
-    if "db" not in g:
-        DATA_DIR.mkdir(parents=True, exist_ok=True)
-        g.db = sqlite3.connect(DB_PATH)
-        g.db.row_factory = sqlite3.Row
-    return g.db
-
-
-def init_db() -> None:
-    DATA_DIR.mkdir(parents=True, exist_ok=True)
-    with sqlite3.connect(DB_PATH) as conn:
-        conn.execute(
-            """
-            CREATE TABLE IF NOT EXISTS comments (
-                id INTEGER PRIMARY KEY AUTOINCREMENT,
-                page_type TEXT NOT NULL,
-                page_key TEXT NOT NULL,
-                user_name TEXT NOT NULL,
-                avatar_seed TEXT NOT NULL,
-                content TEXT NOT NULL,
-                created_at TEXT NOT NULL
-            )
-            """
-        )
-        conn.commit()
-
-
-def close_db(_err: Exception | None = None) -> None:
-    db = g.pop("db", None)
-    if db is not None:
-        db.close()
 
 
 def get_current_user() -> dict[str, str]:
@@ -94,18 +65,104 @@ def save_completed_steps(step_keys: set[str]) -> None:
     session["completed_steps"] = sorted(step_keys)
 
 
-def list_comments(page_type: str, page_key: str) -> list[sqlite3.Row]:
-    db = get_db()
-    rows = db.execute(
-        """
-        SELECT id, user_name, avatar_seed, content, created_at
-        FROM comments
-        WHERE page_type = ? AND page_key = ?
-        ORDER BY id DESC
-        """,
-        (page_type, page_key),
-    ).fetchall()
-    return rows
+def is_supabase_comments_enabled() -> bool:
+    return bool(SUPABASE_URL and SUPABASE_KEY)
+
+
+def build_supabase_headers(include_json: bool = False) -> dict[str, str]:
+    if not SUPABASE_KEY:
+        raise RuntimeError("SUPABASE key is missing")
+
+    headers = {
+        "apikey": SUPABASE_KEY,
+        "Authorization": f"Bearer {SUPABASE_KEY}",
+    }
+    if include_json:
+        headers["Content-Type"] = "application/json"
+    return headers
+
+
+def list_comments_from_supabase(page_type: str, page_key: str) -> list[dict[str, object]]:
+    if not is_supabase_comments_enabled():
+        raise RuntimeError("Supabase comments is not configured")
+
+    query = (
+        "select=id,user_name,avatar_seed,content,created_at"
+        f"&page_type=eq.{urllib.parse.quote(page_type, safe='')}"
+        f"&page_key=eq.{urllib.parse.quote(page_key, safe='')}"
+        "&order=id.desc"
+    )
+    url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_COMMENTS_TABLE}?{query}"
+    request_obj = urllib.request.Request(url, headers=build_supabase_headers())
+
+    try:
+        with urllib.request.urlopen(request_obj, timeout=SUPABASE_TIMEOUT_SECONDS) as response:
+            data = json.loads(response.read().decode("utf-8"))
+    except (urllib.error.URLError, urllib.error.HTTPError, json.JSONDecodeError) as err:
+        raise RuntimeError("failed to fetch comments from Supabase") from err
+
+    if not isinstance(data, list):
+        raise RuntimeError("Supabase comments response is invalid")
+
+    normalized: list[dict[str, object]] = []
+    for row in data:
+        if not isinstance(row, dict):
+            continue
+        normalized.append(
+            {
+                "id": row.get("id", 0),
+                "user_name": row.get("user_name", "游客"),
+                "avatar_seed": row.get("avatar_seed", "sky"),
+                "content": row.get("content", ""),
+                "created_at": row.get("created_at", ""),
+            }
+        )
+    return normalized
+
+
+def create_comment_in_supabase(
+    page_type: str,
+    page_key: str,
+    user_name: str,
+    avatar_seed: str,
+    content: str,
+    created_at: str,
+) -> None:
+    if not is_supabase_comments_enabled():
+        raise RuntimeError("Supabase comments is not configured")
+
+    payload = {
+        "page_type": page_type,
+        "page_key": page_key,
+        "user_name": user_name,
+        "avatar_seed": avatar_seed,
+        "content": content,
+        "created_at": created_at,
+    }
+    body = json.dumps(payload).encode("utf-8")
+    headers = build_supabase_headers(include_json=True)
+    headers["Prefer"] = "return=minimal"
+
+    url = f"{SUPABASE_URL}/rest/v1/{SUPABASE_COMMENTS_TABLE}"
+    request_obj = urllib.request.Request(url, data=body, headers=headers, method="POST")
+
+    try:
+        with urllib.request.urlopen(request_obj, timeout=SUPABASE_TIMEOUT_SECONDS) as response:
+            response.read()
+    except (urllib.error.URLError, urllib.error.HTTPError) as err:
+        raise RuntimeError("failed to create comment in Supabase") from err
+
+
+def list_comments(page_type: str, page_key: str) -> list[dict[str, object]]:
+    if not is_supabase_comments_enabled():
+        app.logger.warning("Supabase comments is not configured. Returning empty comments.")
+        return []
+
+    try:
+        return list_comments_from_supabase(page_type, page_key)
+    except RuntimeError as err:
+        app.logger.warning("Supabase comments read failed: %s", err)
+        return []
 
 
 def create_comment(page_type: str, page_key: str, content: str) -> None:
@@ -115,23 +172,23 @@ def create_comment(page_type: str, page_key: str, content: str) -> None:
     if len(text) > 500:
         raise ValueError("评论不能超过 500 字")
 
+    if not is_supabase_comments_enabled():
+        raise ValueError("评论服务未配置 Supabase，请联系管理员设置环境变量。")
+
     user = get_current_user()
-    db = get_db()
-    db.execute(
-        """
-        INSERT INTO comments (page_type, page_key, user_name, avatar_seed, content, created_at)
-        VALUES (?, ?, ?, ?, ?, ?)
-        """,
-        (
+    created_at = datetime.now().strftime("%Y-%m-%d %H:%M")
+    try:
+        create_comment_in_supabase(
             page_type,
             page_key,
             user["name"],
             user["avatar_seed"],
             text,
-            datetime.now().strftime("%Y-%m-%d %H:%M"),
-        ),
-    )
-    db.commit()
+            created_at,
+        )
+    except RuntimeError as err:
+        app.logger.error("Supabase comments write failed: %s", err)
+        raise ValueError("评论服务暂时不可用，请稍后重试") from err
 
 
 def find_faq_item(faq_id: int) -> dict[str, object] | None:
@@ -229,11 +286,6 @@ def inject_global_data() -> dict[str, object]:
         "stage_nav_items": get_stages(),
         "avatar_colors": AVATAR_COLORS,
     }
-
-
-@app.teardown_appcontext
-def teardown_db(exception: Exception | None) -> None:
-    close_db(exception)
 
 
 # ----------------------------
@@ -436,8 +488,6 @@ def not_found(_error):
 def server_error(_error):
     return render_template("errors/500.html"), 500
 
-
-init_db()
 
 if __name__ == "__main__":
     app.run(debug=True)
