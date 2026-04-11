@@ -9,11 +9,14 @@ pip install -r requirements.txt
 ```
 
 访问：
-- http://127.0.0.1:5000/
-- http://127.0.0.1:5000/programs
-- http://127.0.0.1:5000/guide
-- http://127.0.0.1:5000/faq
-- http://127.0.0.1:5000/assistant
+- http://127.0.0.1:5050/
+- http://127.0.0.1:5050/programs
+- http://127.0.0.1:5050/guide
+- http://127.0.0.1:5050/faq
+- http://127.0.0.1:5050/assistant
+
+说明：
+- 项目本地默认固定使用 `5050` 端口，避免与系统或其他程序占用 `5000` 端口时冲突。
 
 ## 页面结构（课程版）
 - 首页：申请时间路线图
@@ -73,7 +76,7 @@ export ZHIPU_API_KEY="<your-zhipu-api-key>"
 .venv/bin/python app.py
 ```
 
-5. 打开 [http://127.0.0.1:5000/assistant](http://127.0.0.1:5000/assistant) 测试  
+5. 打开 [http://127.0.0.1:5050/assistant](http://127.0.0.1:5050/assistant) 测试  
 6. 若智谱或向量检索异常，系统会自动回退到本地关键词检索，保证页面可用
 
 ## 目录结构
