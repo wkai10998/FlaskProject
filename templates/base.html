@@ -57,7 +57,7 @@
   {% set is_home = request.path == '/' %}
   {% include "header.html" %}
 
-  <main class="{% if is_home %}tocu-home-main max-w-6xl mx-auto px-4 md:px-6 py-4 md:py-5{% else %}max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-10{% endif %}">
+  <main class="{% if is_home %}tocu-home-main w-full px-0 py-0{% else %}max-w-6xl mx-auto px-4 md:px-6 py-8 md:py-10{% endif %}">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="mb-6 space-y-2">

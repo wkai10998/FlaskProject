@@ -1,4 +1,4 @@
-<section class="tocu-home-shell">
+<section class="tocu-home-open">
   {% set home_cards = [
     {
       "tag": "Stage 01",
@@ -33,23 +33,21 @@
     </article>
 
     <article class="tocu-roadmap-panel" aria-label="申请流程阶段总览">
-      <div class="tocu-roadmap-board">
-        <svg class="tocu-roadmap-arrows" viewBox="0 0 100 70" preserveAspectRatio="none" aria-hidden="true">
-          <path class="tocu-roadmap-line" d="M24 19 C39 16,58 17,74 23"></path>
-          <path class="tocu-roadmap-line" d="M73 27 C66 37,48 42,30 47"></path>
-          <path class="tocu-roadmap-line" d="M32 52 C45 55,60 57,74 56"></path>
-        </svg>
+      <svg class="tocu-roadmap-arrows" viewBox="0 0 100 70" preserveAspectRatio="none" aria-hidden="true">
+        <path class="tocu-roadmap-line" d="M23 19 C38 15,59 16,76 23"></path>
+        <path class="tocu-roadmap-line" d="M75 28 C67 38,50 43,31 47"></path>
+        <path class="tocu-roadmap-line" d="M31 52 C45 56,60 57,76 56"></path>
+      </svg>
 
-        <div class="tocu-stage-grid">
-          {% for card in home_cards %}
-            <article class="tocu-roadmap-card tocu-roadmap-card-{{ loop.index }}">
-              <p class="tocu-roadmap-tag">{{ card.tag }}</p>
-              <h2 class="tocu-roadmap-title">{{ card.title }}</h2>
-              <p class="tocu-roadmap-desc">{{ card.description }}</p>
-              <a href="{{ url_for('guide', stage_slug=card.slug) }}" class="tocu-roadmap-link">进入阶段</a>
-            </article>
-          {% endfor %}
-        </div>
+      <div class="tocu-stage-grid">
+        {% for card in home_cards %}
+          <article class="tocu-roadmap-card tocu-roadmap-card-{{ loop.index }}">
+            <p class="tocu-roadmap-tag">{{ card.tag }}</p>
+            <h2 class="tocu-roadmap-title">{{ card.title }}</h2>
+            <p class="tocu-roadmap-desc">{{ card.description }}</p>
+            <a href="{{ url_for('guide', stage_slug=card.slug) }}" class="tocu-roadmap-link">进入阶段</a>
+          </article>
+        {% endfor %}
       </div>
     </article>
   </div>
