@@ -82,7 +82,7 @@ class CourseStructureTestCase(unittest.TestCase):
         html = response.get_data(as_text=True)
 
         self.assertIn("tocu-home-cover__title", html)
-        self.assertIn("进入专业速查", html)
+        self.assertIn("快速比较项目方向、语言要求与截止日期。", html)
         self.assertNotIn("tocu-roadmap-arrows", html)
         self.assertNotIn("tocu-roadmap-card-", html)
 

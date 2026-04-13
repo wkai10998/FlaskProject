@@ -32,10 +32,12 @@ class PageRenderingTestCase(unittest.TestCase):
     def test_homepage_uses_cover_style_message_without_timeline_overview(self):
         html = self.client.get("/").get_data(as_text=True)
 
-        self.assertIn("港中文硕士申请信息服务平台", html)
-        self.assertIn("把港中文硕士申请的时间、材料与步骤讲清楚", html)
-        self.assertIn("进入专业速查", html)
-        self.assertIn("查看操作步骤", html)
+        self.assertIn("ToCU", html)
+        self.assertIn("快速比较项目方向、语言要求与截止日期。", html)
+        self.assertIn("从 6 个阶段进入完整申请流程与具体步骤。", html)
+        self.assertIn("针对推荐信、截止时间和网申动作随时提问。", html)
+        self.assertNotIn("把港中文硕士申请的时间、材料与步骤讲清楚", html)
+        self.assertNotIn("港中文硕士申请信息服务平台。把项目、步骤与即时答疑放在一个温和而清晰的界面里。", html)
         self.assertNotIn("进入阶段", html)
         self.assertNotIn("Stage 01", html)
 

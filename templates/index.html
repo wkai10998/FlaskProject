@@ -7,34 +7,25 @@
   <div class="tocu-home-cover__inner">
     <p class="tocu-home-cover__eyebrow">CUHK Master's Application Companion</p>
     <h1 class="tocu-home-cover__title">ToCU</h1>
-    <p class="tocu-home-cover__slogan">把港中文硕士申请的时间、材料与步骤讲清楚</p>
-    <p class="tocu-home-cover__summary">港中文硕士申请信息服务平台。把项目、步骤与即时答疑放在一个温和而清晰的界面里。</p>
+    <div class="tocu-home-links">
+      <a href="{{ url_for('programs') }}" class="tocu-home-links__card">
+        <span class="tocu-home-links__eyebrow">Programs</span>
+        <strong class="tocu-home-links__title">专业速查</strong>
+        <span class="tocu-home-links__body">快速比较项目方向、语言要求与截止日期。</span>
+      </a>
 
-    <div class="tocu-home-cover__actions">
-      <a href="{{ url_for('programs') }}" class="tocu-btn tocu-btn--primary">进入专业速查</a>
-      <a href="{{ url_for('guide_list') }}" class="tocu-btn tocu-btn--secondary">查看操作步骤</a>
-      <a href="{{ url_for('assistant') }}" class="tocu-btn tocu-btn--ghost">问智能助手</a>
+      <a href="{{ url_for('guide_list') }}" class="tocu-home-links__card">
+        <span class="tocu-home-links__eyebrow">Guides</span>
+        <strong class="tocu-home-links__title">操作步骤</strong>
+        <span class="tocu-home-links__body">从 6 个阶段进入完整申请流程与具体步骤。</span>
+      </a>
+
+      <a href="{{ url_for('assistant') }}" class="tocu-home-links__card">
+        <span class="tocu-home-links__eyebrow">Assistant</span>
+        <strong class="tocu-home-links__title">智能助手</strong>
+        <span class="tocu-home-links__body">针对推荐信、截止时间和网申动作随时提问。</span>
+      </a>
     </div>
-  </div>
-
-  <div class="tocu-home-links">
-    <a href="{{ url_for('programs') }}" class="tocu-home-links__card">
-      <span class="tocu-home-links__eyebrow">Programs</span>
-      <strong class="tocu-home-links__title">专业速查</strong>
-      <span class="tocu-home-links__body">快速比较项目方向、语言要求与截止日期。</span>
-    </a>
-
-    <a href="{{ url_for('guide_list') }}" class="tocu-home-links__card">
-      <span class="tocu-home-links__eyebrow">Guides</span>
-      <strong class="tocu-home-links__title">操作步骤</strong>
-      <span class="tocu-home-links__body">从 6 个阶段进入完整申请流程与具体步骤。</span>
-    </a>
-
-    <a href="{{ url_for('assistant') }}" class="tocu-home-links__card">
-      <span class="tocu-home-links__eyebrow">Assistant</span>
-      <strong class="tocu-home-links__title">智能助手</strong>
-      <span class="tocu-home-links__body">针对推荐信、截止时间和网申动作随时提问。</span>
-    </a>
   </div>
 </section>
 {% endblock %}
