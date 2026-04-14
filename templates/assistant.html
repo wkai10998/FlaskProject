@@ -4,40 +4,44 @@
 
 {% block body %}
 <section class="tocu-page-stack">
-  <section class="tocu-assistant-shell">
-    <div class="tocu-assistant-shell__intro">
-      <p class="tocu-assistant-shell__intro-label">快速提问</p>
-      {% if suggested_questions %}
-        <div class="tocu-chip-list">
-          {% for question in suggested_questions %}
-            <button type="button" data-question-chip="{{ question }}" class="tocu-chip">{{ question }}</button>
-          {% endfor %}
-        </div>
-      {% endif %}
-    </div>
-
-    <div class="tocu-chat-surface">
-      <div id="assistant-chat-log" class="tocu-chat-log">
-        <article class="flex justify-start">
-          <div class="max-w-[90%] md:max-w-[80%] rounded-2xl rounded-bl-md border border-brand-100 bg-paper-25 px-4 py-3 text-sm leading-7 text-ink-900">
-            <p class="whitespace-pre-wrap">你好，我是你的申请助手。你可以直接问我截止时间、材料准备、推荐信和网申步骤相关问题。</p>
+  <section class="tocu-assistant-shell" data-assistant-shell data-assistant-stage="empty">
+    <div class="tocu-assistant-shell__window">
+      <div class="tocu-assistant-shell__intro" data-assistant-empty-state>
+        <p class="tocu-assistant-shell__intro-label">ToCU Assistant</p>
+        <h1 class="tocu-assistant-shell__headline">有什么我能帮你的吗？</h1>
+        <p class="tocu-assistant-shell__intro-copy">围绕截止时间、推荐信、材料准备和网申步骤，直接把问题发给我。</p>
+        {% if suggested_questions %}
+          <div class="tocu-chip-list tocu-chip-list--assistant">
+            {% for question in suggested_questions %}
+              <button type="button" data-question-chip="{{ question }}" class="tocu-chip">{{ question }}</button>
+            {% endfor %}
           </div>
-        </article>
+        {% endif %}
       </div>
 
-      <div class="tocu-chat-compose">
-        <p id="assistant-chat-status" class="tocu-chat-compose__status">准备就绪。按 Enter 发送，Shift + Enter 换行。</p>
-        <form id="assistant-chat-form" data-endpoint="{{ url_for('assistant_message_api') }}" class="tocu-chat-compose__form">
+      <div class="tocu-chat-surface">
+        <div
+          id="assistant-chat-log"
+          class="tocu-chat-log"
+          data-initial-message="你好，我是你的申请助手。你可以直接问我截止时间、材料准备、推荐信和网申步骤相关问题。"
+        ></div>
+      </div>
+    </div>
+
+    <div class="tocu-chat-compose tocu-chat-compose--fixed" data-assistant-compose-fixed>
+      <p id="assistant-chat-status" class="tocu-chat-compose__status">准备就绪。按 Enter 发送，Shift + Enter 换行。</p>
+      <form id="assistant-chat-form" data-endpoint="{{ url_for('assistant_message_api') }}" class="tocu-chat-compose__form">
+        <div class="tocu-chat-compose__surface">
           <label for="assistant-chat-input" class="sr-only">输入问题</label>
           <textarea
             id="assistant-chat-input"
-            rows="3"
-            placeholder="例如：推荐信要提前多久联系老师？"
-            class="tocu-input tocu-input--textarea"
+            rows="1"
+            placeholder="发消息"
+            class="tocu-chat-compose__input"
           ></textarea>
-          <button id="assistant-chat-send" type="submit" class="tocu-btn tocu-btn--primary">发送</button>
-        </form>
-      </div>
+          <button id="assistant-chat-send" type="submit" class="tocu-chat-compose__send" aria-label="发送消息">↗</button>
+        </div>
+      </form>
     </div>
   </section>
 </section>

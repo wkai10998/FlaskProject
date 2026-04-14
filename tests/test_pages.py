@@ -73,7 +73,11 @@ class PageRenderingTestCase(unittest.TestCase):
         login_html = self.client.get("/?open_login=1&auth_tab=login").get_data(as_text=True)
 
         self.assertIn("智能助手", assistant_html)
-        self.assertIn("快速提问", assistant_html)
+        self.assertIn("有什么我能帮你的吗？", assistant_html)
+        self.assertIn('data-assistant-shell', assistant_html)
+        self.assertIn('data-assistant-stage="empty"', assistant_html)
+        self.assertIn('data-assistant-empty-state', assistant_html)
+        self.assertIn('data-assistant-compose-fixed', assistant_html)
         self.assertIn("登录 / 注册", login_html)
 
 

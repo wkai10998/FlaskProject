@@ -407,7 +407,6 @@ code {
 .tocu-directory-toolbar,
 .tocu-resume-card,
 .tocu-auth-card,
-.tocu-chat-surface,
 .tocu-guide-main__surface,
 .tocu-guide-nav__panel,
 .tocu-guide-side__panel,
@@ -770,7 +769,6 @@ code {
 .tocu-guide-side__panel,
 .tocu-guide-main__surface,
 .tocu-auth-card,
-.tocu-chat-surface,
 .tocu-faq-card,
 .tocu-auth-modal {
   padding: 1.25rem;
@@ -922,14 +920,76 @@ code {
   line-height: 1.65;
 }
 
+.tocu-site-shell--assistant {
+  width: min(1500px, calc(100% - 2rem));
+  padding-top: 0.55rem;
+  padding-bottom: 10rem;
+}
+
+body.tocu-body--assistant {
+  background:
+    radial-gradient(82% 70% at 50% 0%, rgba(201, 100, 66, 0.06), transparent 72%),
+    radial-gradient(70% 55% at 0% 8%, rgba(255, 255, 255, 0.7), transparent 68%),
+    var(--tocu-bg);
+}
+
+.tocu-site-header--assistant {
+  border-bottom-color: rgba(232, 230, 220, 0.6);
+  background: rgba(245, 244, 237, 0.76);
+  backdrop-filter: blur(18px);
+}
+
+.tocu-site-header--assistant .tocu-site-nav {
+  background: rgba(250, 249, 245, 0.64);
+  border-color: rgba(232, 230, 220, 0.74);
+  box-shadow: none;
+}
+
+.tocu-site-header--assistant .tocu-site-header__subtitle {
+  color: color-mix(in srgb, var(--tocu-subtle) 82%, transparent);
+}
+
 .tocu-assistant-shell {
+  position: relative;
   display: grid;
-  gap: 1rem;
+  min-height: calc(100svh - 7.4rem);
+}
+
+.tocu-assistant-shell__window {
+  width: min(1240px, 100%);
+  min-height: 100%;
+  margin: 0 auto;
+  display: grid;
+  align-content: center;
+  padding: clamp(1rem, 3vw, 2rem) clamp(0.2rem, 1vw, 0.4rem);
 }
 
 .tocu-assistant-shell__intro {
+  width: min(1040px, 100%);
+  margin: 0 auto;
   display: grid;
-  gap: 0.75rem;
+  justify-items: center;
+  text-align: center;
+  gap: 1.35rem;
+  transition: opacity var(--tocu-transition), transform var(--tocu-transition), max-height var(--tocu-transition), margin var(--tocu-transition);
+}
+
+.tocu-assistant-shell__headline {
+  margin: 0;
+  font-family: "Source Serif 4", "Noto Serif SC", serif;
+  font-size: clamp(2.9rem, 5vw, 4.5rem);
+  font-weight: 600;
+  line-height: 1.06;
+  letter-spacing: -0.04em;
+  color: var(--tocu-ink);
+}
+
+.tocu-assistant-shell__intro-copy {
+  max-width: 34rem;
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--tocu-muted);
 }
 
 .tocu-chip-list {
@@ -938,51 +998,214 @@ code {
   gap: 0.65rem;
 }
 
+.tocu-chip-list--assistant {
+  justify-content: center;
+  gap: 0.8rem 0.9rem;
+  max-width: 92rem;
+}
+
 .tocu-chip {
-  border: 1px solid var(--tocu-border-strong);
+  border: 1px solid rgba(232, 230, 220, 0.96);
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.8);
-  color: var(--tocu-muted);
-  padding: 0.55rem 0.9rem;
-  transition: border-color var(--tocu-transition), color var(--tocu-transition), background-color var(--tocu-transition);
+  background: rgba(255, 255, 255, 0.56);
+  color: color-mix(in srgb, var(--tocu-ink) 82%, var(--tocu-muted) 18%);
+  padding: 0.8rem 1.25rem;
+  font-size: 1rem;
+  line-height: 1.45;
+  transition: border-color var(--tocu-transition), color var(--tocu-transition), background-color var(--tocu-transition), transform var(--tocu-transition);
   cursor: pointer;
 }
 
 .tocu-chip:hover {
+  transform: translateY(-1px);
   border-color: rgba(201, 100, 66, 0.24);
   color: var(--tocu-ink);
+  background: rgba(255, 255, 255, 0.76);
 }
 
 .tocu-chat-surface {
+  width: min(940px, 100%);
+  margin: 0 auto;
+  max-height: 0;
   overflow: hidden;
+  opacity: 0;
+  pointer-events: none;
+  transform: translateY(1.5rem);
+  transition: opacity var(--tocu-transition), transform var(--tocu-transition);
 }
 
 .tocu-chat-log {
-  max-height: 60vh;
+  min-height: calc(100svh - 16.5rem);
+  max-height: calc(100svh - 16.5rem);
   overflow-y: auto;
-  padding: 1.25rem;
+  padding: 0 0 0.75rem;
   display: grid;
   gap: 1rem;
-  background: rgba(255, 255, 255, 0.5);
+  background: transparent;
+}
+
+.tocu-chat-message {
+  display: flex;
+}
+
+.tocu-chat-message--assistant {
+  justify-content: flex-start;
+}
+
+.tocu-chat-message--user {
+  justify-content: flex-end;
+}
+
+.tocu-chat-bubble {
+  max-width: min(80%, 42rem);
+  padding: 0.95rem 1.1rem;
+  border-radius: 1.6rem;
+  font-size: 0.98rem;
+  line-height: 1.8;
+  box-shadow: 0 10px 24px rgba(20, 20, 19, 0.04);
+}
+
+.tocu-chat-bubble--assistant {
+  border: 1px solid rgba(232, 230, 220, 0.96);
+  border-bottom-left-radius: 0.55rem;
+  background: rgba(255, 255, 255, 0.84);
+  color: var(--tocu-ink);
+}
+
+.tocu-chat-bubble--user {
+  border-bottom-right-radius: 0.55rem;
+  background: var(--tocu-accent);
+  color: var(--tocu-surface);
+}
+
+.tocu-chat-bubble__text {
+  margin: 0;
+  white-space: pre-wrap;
+}
+
+.tocu-chat-bubble__meta-title,
+.tocu-chat-bubble__timing {
+  margin: 0.7rem 0 0;
+  font-size: 0.74rem;
+  color: color-mix(in srgb, var(--tocu-ink) 60%, var(--tocu-subtle) 40%);
+}
+
+.tocu-chat-bubble__sources {
+  margin: 0.45rem 0 0;
+  padding-left: 1rem;
+  display: grid;
+  gap: 0.2rem;
+}
+
+.tocu-chat-bubble__sources a {
+  color: var(--tocu-accent-strong);
+  font-size: 0.8rem;
+}
+
+.tocu-chat-bubble__sources a:hover {
+  color: var(--tocu-accent);
 }
 
 .tocu-chat-compose {
-  border-top: 1px solid var(--tocu-border);
-  padding: 1rem 1.25rem 1.25rem;
+  width: min(940px, calc(100% - 1rem));
+}
+
+.tocu-chat-compose--fixed {
+  position: fixed;
+  left: 50%;
+  bottom: calc(1.1rem + env(safe-area-inset-bottom));
+  transform: translateX(-50%);
+  z-index: 32;
 }
 
 .tocu-chat-compose__status {
-  margin: 0;
+  margin: 0 0 0.45rem 0.3rem;
   color: var(--tocu-muted);
-  font-size: 0.92rem;
+  font-size: 0.9rem;
 }
 
 .tocu-chat-compose__form {
-  margin-top: 0.85rem;
+  margin: 0;
+}
+
+.tocu-chat-compose__surface {
   display: grid;
   grid-template-columns: minmax(0, 1fr) auto;
-  gap: 0.9rem;
+  gap: 0.85rem;
   align-items: end;
+  padding: 0.7rem 0.75rem 0.75rem 1.05rem;
+  border-radius: 2rem;
+  border: 1px solid rgba(196, 202, 255, 0.95);
+  background: rgba(250, 249, 245, 0.98);
+  box-shadow: 0 14px 36px rgba(146, 174, 255, 0.16);
+}
+
+.tocu-chat-compose__input {
+  width: 100%;
+  min-height: 4.8rem;
+  max-height: 12rem;
+  border: 0;
+  background: transparent;
+  color: var(--tocu-ink);
+  resize: none;
+  padding: 0.45rem 0 0;
+  line-height: 1.7;
+}
+
+.tocu-chat-compose__input::placeholder {
+  color: color-mix(in srgb, var(--tocu-subtle) 70%, transparent);
+}
+
+.tocu-chat-compose__input:focus {
+  outline: none;
+}
+
+.tocu-chat-compose__send {
+  width: 3.1rem;
+  height: 3.1rem;
+  border: 0;
+  border-radius: 999px;
+  display: grid;
+  place-items: center;
+  background: rgba(20, 20, 19, 0.08);
+  color: var(--tocu-ink);
+  font-size: 1.35rem;
+  line-height: 1;
+  cursor: pointer;
+  transition: transform var(--tocu-transition), background-color var(--tocu-transition), color var(--tocu-transition);
+}
+
+.tocu-chat-compose__send:hover {
+  transform: translateY(-1px);
+  background: var(--tocu-accent);
+  color: var(--tocu-surface);
+}
+
+.tocu-chat-compose__send:disabled {
+  opacity: 0.72;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.tocu-assistant-shell[data-assistant-stage="chat"] .tocu-assistant-shell__window {
+  align-content: start;
+}
+
+.tocu-assistant-shell[data-assistant-stage="chat"] .tocu-assistant-shell__intro {
+  opacity: 0;
+  transform: translateY(-1.25rem);
+  pointer-events: none;
+  max-height: 0;
+  overflow: hidden;
+  margin-bottom: -1rem;
+}
+
+.tocu-assistant-shell[data-assistant-stage="chat"] .tocu-chat-surface {
+  max-height: none;
+  overflow: visible;
+  opacity: 1;
+  pointer-events: auto;
+  transform: translateY(0);
 }
 
 .tocu-faq-list {
@@ -1077,6 +1300,15 @@ code {
   .tocu-guide-side {
     position: static;
   }
+
+  .tocu-assistant-shell__headline {
+    font-size: clamp(2.6rem, 5.2vw, 3.8rem);
+  }
+
+  .tocu-chat-surface,
+  .tocu-chat-compose {
+    width: min(880px, calc(100% - 1rem));
+  }
 }
 
 @media (max-width: 860px) {
@@ -1091,13 +1323,35 @@ code {
 
   .tocu-stage-grid,
   .tocu-directory-grid,
-  .tocu-auth-grid,
-  .tocu-chat-compose__form {
+  .tocu-auth-grid {
     grid-template-columns: 1fr;
   }
 
-  .tocu-chat-compose__form {
-    display: grid;
+  .tocu-site-shell--assistant {
+    width: calc(100% - 1.25rem);
+    padding-top: 0.35rem;
+    padding-bottom: 9.6rem;
+  }
+
+  .tocu-assistant-shell {
+    min-height: calc(100svh - 8.9rem);
+  }
+
+  .tocu-assistant-shell__window {
+    padding-top: 0.8rem;
+  }
+
+  .tocu-assistant-shell__intro {
+    gap: 1rem;
+  }
+
+  .tocu-chat-log {
+    min-height: calc(100svh - 18.5rem);
+    max-height: calc(100svh - 18.5rem);
+  }
+
+  .tocu-chat-compose {
+    width: calc(100% - 1.25rem);
   }
 
   .tocu-home-cover {
@@ -1159,6 +1413,71 @@ code {
 
   .tocu-site-shell--home {
     padding-top: 0.5rem;
+  }
+
+  .tocu-site-shell--assistant {
+    padding-bottom: 8.75rem;
+  }
+
+  .tocu-assistant-shell__headline {
+    font-size: clamp(2.2rem, 11vw, 3rem);
+    line-height: 1.08;
+  }
+
+  .tocu-assistant-shell__intro-copy {
+    font-size: 0.95rem;
+    line-height: 1.7;
+  }
+
+  .tocu-chip-list--assistant {
+    justify-content: flex-start;
+    gap: 0.65rem;
+  }
+
+  .tocu-chip {
+    width: 100%;
+    justify-content: flex-start;
+    text-align: left;
+    padding: 0.78rem 1rem;
+    font-size: 0.95rem;
+  }
+
+  .tocu-chat-log {
+    min-height: calc(100svh - 17.6rem);
+    max-height: calc(100svh - 17.6rem);
+    gap: 0.85rem;
+  }
+
+  .tocu-chat-bubble {
+    max-width: 92%;
+    padding: 0.9rem 1rem;
+    font-size: 0.94rem;
+    line-height: 1.72;
+  }
+
+  .tocu-chat-compose--fixed {
+    bottom: calc(0.75rem + env(safe-area-inset-bottom));
+  }
+
+  .tocu-chat-compose__status {
+    margin-left: 0.1rem;
+    font-size: 0.84rem;
+  }
+
+  .tocu-chat-compose__surface {
+    padding: 0.6rem 0.65rem 0.68rem 0.88rem;
+    border-radius: 1.55rem;
+  }
+
+  .tocu-chat-compose__input {
+    min-height: 4.15rem;
+    font-size: 0.98rem;
+  }
+
+  .tocu-chat-compose__send {
+    width: 2.85rem;
+    height: 2.85rem;
+    font-size: 1.2rem;
   }
 
   .tocu-home-cover {

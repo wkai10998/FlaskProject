@@ -1,6 +1,7 @@
 __pycache__/
 *.pyc
 .venv/
+.superpowers/
 .DS_Store
 .env
 .env.*

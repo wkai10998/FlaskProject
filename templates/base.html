@@ -46,11 +46,12 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/app.css') }}">
   <title>{{ title or "ToCU" }}</title>
 </head>
-<body class="tocu-body">
   {% set is_home = request.path == '/' %}
+  {% set is_assistant = request.path.startswith('/assistant') %}
+<body class="tocu-body{% if is_assistant %} tocu-body--assistant{% endif %}">
   {% include "header.html" %}
 
-  <main class="tocu-site-shell {% if is_home %}tocu-site-shell--home{% endif %}">
+  <main class="tocu-site-shell {% if is_home %}tocu-site-shell--home{% endif %}{% if is_assistant %} tocu-site-shell--assistant{% endif %}">
     {% with messages = get_flashed_messages(with_categories=true) %}
       {% if messages %}
         <div class="tocu-flash-stack">
@@ -67,7 +68,7 @@
   </main>
 
   {% include "login_modal.html" %}
-  {% if not is_home %}
+  {% if not is_home and not is_assistant %}
     {% include "footer.html" %}
   {% endif %}
   <script src="{{ url_for('static', filename='js/components/login_modal.js') }}"></script>

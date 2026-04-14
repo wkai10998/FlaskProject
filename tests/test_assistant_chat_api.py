@@ -12,8 +12,12 @@ class AssistantChatApiTestCase(unittest.TestCase):
         response = self.client.get("/assistant")
         self.assertEqual(response.status_code, 200)
         html = response.get_data(as_text=True)
+        self.assertIn('data-assistant-shell', html)
+        self.assertIn('data-assistant-stage="empty"', html)
+        self.assertIn('data-assistant-empty-state', html)
         self.assertIn('id="assistant-chat-log"', html)
         self.assertIn('id="assistant-chat-form"', html)
+        self.assertIn('data-assistant-compose-fixed', html)
         self.assertIn("/assistant/message", html)
 
     def test_assistant_message_api_success(self):

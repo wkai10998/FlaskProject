@@ -1,4 +1,6 @@
 (function () {
+  const shell = document.querySelector("[data-assistant-shell]");
+  const emptyState = document.querySelector("[data-assistant-empty-state]");
   const form = document.getElementById("assistant-chat-form");
   const input = document.getElementById("assistant-chat-input");
   const sendButton = document.getElementById("assistant-chat-send");
@@ -6,16 +8,28 @@
   const statusNode = document.getElementById("assistant-chat-status");
   const chips = Array.from(document.querySelectorAll("[data-question-chip]"));
 
-  if (!form || !input || !sendButton || !chatLog || !statusNode) return;
+  if (!shell || !form || !input || !sendButton || !chatLog || !statusNode) return;
 
   const endpoint = form.dataset.endpoint || "/assistant/message";
+  const initialMessage = chatLog.dataset.initialMessage || "";
   let pending = false;
   let phaseTimer = null;
+  let hasActivatedChat = shell.dataset.assistantStage === "chat";
+  let hasRenderedGreeting = false;
 
   function safeLink(href) {
     if (typeof href !== "string") return "#";
     if (href.startsWith("/")) return href;
     return "#";
+  }
+
+  function activateChatMode() {
+    if (hasActivatedChat) return;
+    hasActivatedChat = true;
+    shell.dataset.assistantStage = "chat";
+    if (emptyState) {
+      emptyState.setAttribute("aria-hidden", "true");
+    }
   }
 
   function setStatus(text) {
@@ -30,6 +44,11 @@
     sendButton.classList.toggle("cursor-not-allowed", isPending);
   }
 
+  function resizeInput() {
+    input.style.height = "0px";
+    input.style.height = Math.min(input.scrollHeight, 192) + "px";
+  }
+
   function scrollToBottom() {
     chatLog.scrollTop = chatLog.scrollHeight;
   }
@@ -38,12 +57,12 @@
     if (!Array.isArray(sources) || sources.length === 0) return;
 
     const title = document.createElement("p");
-    title.className = "mt-3 text-xs font-semibold text-ink-700";
+    title.className = "tocu-chat-bubble__meta-title";
     title.textContent = "引用来源";
     parent.appendChild(title);
 
     const list = document.createElement("ul");
-    list.className = "mt-1 space-y-1";
+    list.className = "tocu-chat-bubble__sources";
 
     sources.slice(0, 3).forEach((item) => {
       const source = item && typeof item.source === "string" ? item.source : "来源";
@@ -52,7 +71,6 @@
       const li = document.createElement("li");
       const a = document.createElement("a");
       a.href = safeLink(link);
-      a.className = "text-xs text-brand-700 hover:text-brand-600";
       a.textContent = source;
       li.appendChild(a);
       list.appendChild(li);
@@ -63,19 +81,17 @@
 
   function appendMessage(role, text, meta) {
     const row = document.createElement("article");
-    row.className = role === "user" ? "flex justify-end" : "flex justify-start";
+    row.className = role === "user" ? "tocu-chat-message tocu-chat-message--user" : "tocu-chat-message tocu-chat-message--assistant";
 
     const bubble = document.createElement("div");
     if (role === "user") {
-      bubble.className =
-        "max-w-[85%] md:max-w-[75%] rounded-2xl rounded-br-md bg-brand-600 text-white px-4 py-3 text-sm leading-7 shadow-soft-card";
+      bubble.className = "tocu-chat-bubble tocu-chat-bubble--user";
     } else {
-      bubble.className =
-        "max-w-[90%] md:max-w-[80%] rounded-2xl rounded-bl-md border border-brand-100 bg-paper-25 px-4 py-3 text-sm leading-7 text-ink-900";
+      bubble.className = "tocu-chat-bubble tocu-chat-bubble--assistant";
     }
 
     const textNode = document.createElement("p");
-    textNode.className = "whitespace-pre-wrap";
+    textNode.className = "tocu-chat-bubble__text";
     textNode.textContent = text;
     bubble.appendChild(textNode);
 
@@ -85,7 +101,7 @@
 
     if (role === "assistant" && meta && typeof meta.elapsedMs === "number") {
       const timing = document.createElement("p");
-      timing.className = "mt-2 text-[11px] text-ink-700";
+      timing.className = "tocu-chat-bubble__timing";
       timing.textContent = "响应耗时 " + (meta.elapsedMs / 1000).toFixed(2) + "s";
       bubble.appendChild(timing);
     }
@@ -93,6 +109,12 @@
     row.appendChild(bubble);
     chatLog.appendChild(row);
     scrollToBottom();
+  }
+
+  function ensureGreeting() {
+    if (hasRenderedGreeting || !initialMessage) return;
+    appendMessage("assistant", initialMessage);
+    hasRenderedGreeting = true;
   }
 
   async function submitQuestion(question) {
@@ -104,8 +126,11 @@
       return;
     }
 
+    activateChatMode();
+    ensureGreeting();
     appendMessage("user", normalized);
     input.value = "";
+    resizeInput();
     setPending(true);
     setStatus("正在检索资料...");
     phaseTimer = window.setTimeout(function () {
@@ -149,6 +174,10 @@
     void submitQuestion(input.value);
   });
 
+  input.addEventListener("input", function () {
+    resizeInput();
+  });
+
   input.addEventListener("keydown", function (event) {
     if (event.key !== "Enter" || event.shiftKey || event.isComposing) return;
     event.preventDefault();
@@ -163,4 +192,7 @@
       void submitQuestion(preset);
     });
   });
+
+  resizeInput();
+  input.focus();
 })();

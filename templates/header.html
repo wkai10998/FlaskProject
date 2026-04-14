@@ -1,4 +1,4 @@
-<header class="tocu-site-header">
+<header class="tocu-site-header {% if request.path.startswith('/assistant') %}tocu-site-header--assistant{% endif %}">
   <div class="tocu-site-header__inner">
     <a href="{{ url_for('index') }}" class="tocu-site-header__brand">
       <span class="tocu-site-header__mark">ToCU</span>
