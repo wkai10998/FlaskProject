@@ -5,27 +5,42 @@
 {% block body %}
 <section class="tocu-page-stack">
   <div class="tocu-directory-toolbar">
-    <div class="tocu-directory-toolbar__filters">
-      <label class="tocu-field tocu-field--search">
-        <span class="sr-only">搜索专业</span>
-        <input id="program-search" type="text" placeholder="输入专业名、学院或方向关键词..." class="tocu-input">
-      </label>
-
-      <label class="tocu-field tocu-field--college">
-        <span class="tocu-field__label">按学院筛选</span>
-        <select id="program-college-filter" class="tocu-input">
-          <option value="全部" selected>全部</option>
-          <option value="文学院">文学院</option>
-          <option value="商学院">商学院</option>
-          <option value="教育学院">教育学院</option>
-          <option value="工学院">工学院</option>
-          <option value="跨学院">跨学院</option>
-          <option value="法学院">法学院</option>
-          <option value="医学院">医学院</option>
-          <option value="理学院">理学院</option>
-          <option value="社科学院">社科学院</option>
-        </select>
-      </label>
+    <div class="tocu-optimized-searchbar">
+      <div class="tocu-optimized-searchbar__inner">
+        <!-- 搜索输入框区域 -->
+        <div class="tocu-optimized-searchbar__input-wrap">
+          <span class="tocu-optimized-searchbar__icon">
+            <!-- 搜索SVG -->
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="M21 21l-4.35-4.35"/></svg>
+          </span>
+          <input id="program-search" type="text" placeholder="输入专业名、学院或方向关键词..." class="tocu-optimized-searchbar__input">
+          <button type="button" id="program-search-clear" class="tocu-optimized-searchbar__clear" style="display:none;">
+            <!-- X SVG -->
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+          </button>
+        </div>
+        <!-- 学院筛选下拉框 -->
+        <div class="tocu-optimized-searchbar__select-wrap">
+          <select id="program-college-filter" class="tocu-optimized-searchbar__select">
+            <option value="全部" selected>全部</option>
+            <option value="文学院">文学院</option>
+            <option value="商学院">商学院</option>
+            <option value="教育学院">教育学院</option>
+            <option value="工学院">工学院</option>
+            <option value="跨学院">跨学院</option>
+            <option value="法学院">法学院</option>
+            <option value="医学院">医学院</option>
+            <option value="理学院">理学院</option>
+            <option value="社科学院">社科学院</option>
+          </select>
+          <span class="tocu-optimized-searchbar__chevron">
+            <!-- ChevronDown SVG -->
+            <svg width="20" height="20" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="6 9 12 15 18 9"/></svg>
+          </span>
+        </div>
+        <!-- 搜索按钮 -->
+        <button type="button" id="program-search-btn" class="tocu-optimized-searchbar__btn">搜索</button>
+      </div>
     </div>
   </div>
 
@@ -70,7 +85,7 @@
           </div>
         </dl>
 
-        <a href="{{ p.link }}" target="_blank" rel="noreferrer" class="tocu-directory-card__link">查看官网入口</a>
+        <a href="{{ p.link }}" target="_blank" rel="noreferrer" class="tocu-btn tocu-btn--dark tocu-btn--small">查看官网入口</a>
       </article>
     {% endfor %}
   </div>

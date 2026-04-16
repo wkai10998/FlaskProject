@@ -10,59 +10,190 @@
   data-auto-tab="{{ default_auth_tab }}"
   class="hidden fixed inset-0 z-50 items-center justify-center bg-black/35 px-4"
 >
-  <div class="tocu-auth-modal">
-    <div class="tocu-auth-modal__head">
+  <div class="relative w-full max-w-md bg-stone-50 rounded-2xl shadow-xl p-8">
+
+    <!-- 1. 头部区域：标题与关闭图标 -->
+    <div class="flex justify-between items-start mb-6">
       <div>
-        <h2 class="tocu-auth-modal__title">登录 / 注册</h2>
-        <p class="tocu-auth-modal__body">登录后可以发表评论，并同步你的学习进度。</p>
+        <h2 class="text-2xl font-bold text-gray-900">
+          登录 / 注册
+        </h2>
+        <p class="text-sm text-gray-500 mt-2">
+          登录后可以发表评论，并同步你的学习进度。
+        </p>
       </div>
-      <button type="button" data-close-login class="tocu-btn tocu-btn--ghost tocu-btn--small">关闭</button>
+      <!-- 优化后的关闭按钮：使用图标代替文字 -->
+      <button
+        type="button"
+        data-close-login
+        class="p-2 text-gray-400 hover:text-gray-700 hover:bg-gray-100 rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-amber-700"
+        aria-label="关闭"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
     </div>
 
-    <div class="tocu-auth-modal__tabs">
-      <button type="button" data-auth-tab="login" class="auth-tab tocu-auth-modal__tab">登录</button>
-      <button type="button" data-auth-tab="register" class="auth-tab tocu-auth-modal__tab">注册</button>
+    <!-- 2. 标签切换区域 (Tabs) -->
+    <div class="flex gap-2 mb-8 border-b border-gray-200 pb-2">
+      <button
+        type="button"
+        data-auth-tab="login"
+        class="auth-tab px-6 py-2 rounded-lg text-sm font-medium transition-colors text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+      >
+        登录
+      </button>
+      <button
+        type="button"
+        data-auth-tab="register"
+        class="auth-tab px-6 py-2 rounded-lg text-sm font-medium transition-colors text-gray-500 hover:bg-gray-100 hover:text-gray-900"
+      >
+        注册
+      </button>
     </div>
 
-    <section data-auth-panel="login" class="mt-4">
-      <form action="{{ url_for('auth_login') }}" method="post" class="tocu-form-stack">
+    <!-- 3. 登录表单 -->
+    <section data-auth-panel="login">
+      <form class="space-y-5" action="{{ url_for('auth_login') }}" method="post">
         <input type="hidden" name="next" value="{{ next_url }}">
-        <label class="tocu-field">
-          <span class="tocu-field__label">邮箱</span>
-          <input name="email" type="email" required class="tocu-input">
-        </label>
-        <label class="tocu-field">
-          <span class="tocu-field__label">密码</span>
-          <input name="password" type="password" required class="tocu-input">
-        </label>
-        <button type="submit" class="tocu-btn tocu-btn--primary tocu-btn--full">登录</button>
+
+        <!-- 邮箱输入 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            邮箱
+          </label>
+          <input
+            name="email"
+            type="email"
+            placeholder="example@email.com"
+            required
+            class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+          />
+        </div>
+
+        <!-- 密码输入 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            密码
+          </label>
+          <div class="relative">
+            <input
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+              required
+              class="w-full pl-4 pr-12 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+            />
+            <!-- 密码可见性切换按钮 -->
+            <button
+              type="button"
+              onclick="togglePasswordVisibility(this)"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+            >
+              <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 提交按钮 -->
+        <button
+          type="submit"
+          class="w-full mt-2 px-4 py-3.5 bg-amber-700 text-white text-sm font-medium rounded-xl hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-700 transition-colors shadow-sm"
+        >
+          登录
+        </button>
+
       </form>
     </section>
 
-    <section data-auth-panel="register" class="mt-4 hidden">
-      <form action="{{ url_for('auth_register') }}" method="post" class="tocu-form-stack">
+    <!-- 4. 注册表单 -->
+    <section data-auth-panel="register" class="hidden">
+      <form class="space-y-5" action="{{ url_for('auth_register') }}" method="post">
         <input type="hidden" name="next" value="{{ next_url }}">
-        <label class="tocu-field">
-          <span class="tocu-field__label">昵称</span>
-          <input name="name" type="text" maxlength="20" required class="tocu-input">
-        </label>
-        <label class="tocu-field">
-          <span class="tocu-field__label">邮箱</span>
-          <input name="email" type="email" required class="tocu-input">
-        </label>
-        <label class="tocu-field">
-          <span class="tocu-field__label">密码（至少 6 位）</span>
-          <input name="password" type="password" minlength="6" required class="tocu-input">
-        </label>
-        <label class="tocu-field">
-          <span class="tocu-field__label">头像色</span>
-          <select name="avatar_seed" class="tocu-input">
+
+        <!-- 昵称输入 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            昵称
+          </label>
+          <input
+            name="name"
+            type="text"
+            maxlength="20"
+            required
+            class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+          />
+        </div>
+
+        <!-- 邮箱输入 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            邮箱
+          </label>
+          <input
+            name="email"
+            type="email"
+            placeholder="example@email.com"
+            required
+            class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+          />
+        </div>
+
+        <!-- 密码输入 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            密码（至少 6 位）
+          </label>
+          <div class="relative">
+            <input
+              name="password"
+              type="password"
+              placeholder="请输入密码"
+              minlength="6"
+              required
+              class="w-full pl-4 pr-12 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+            />
+            <!-- 密码可见性切换按钮 -->
+            <button
+              type="button"
+              onclick="togglePasswordVisibility(this)"
+              class="absolute inset-y-0 right-0 pr-3 flex items-center text-gray-400 hover:text-gray-600 focus:outline-none"
+            >
+              <svg id="eye-icon" class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path>
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"></path>
+              </svg>
+            </button>
+          </div>
+        </div>
+
+        <!-- 头像色选择 -->
+        <div>
+          <label class="block text-sm font-medium text-gray-700 mb-1.5">
+            头像色
+          </label>
+          <select
+            name="avatar_seed"
+            class="w-full px-4 py-3 bg-white border border-gray-200 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-amber-700 focus:border-transparent transition-all shadow-sm"
+          >
             {% for seed in ['sky', 'emerald', 'amber', 'rose', 'violet'] %}
               <option value="{{ seed }}">{{ seed }}</option>
             {% endfor %}
           </select>
-        </label>
-        <button type="submit" class="tocu-btn tocu-btn--secondary tocu-btn--full">注册并登录</button>
+        </div>
+
+        <!-- 提交按钮 -->
+        <button
+          type="submit"
+          class="w-full mt-2 px-4 py-3.5 bg-amber-700 text-white text-sm font-medium rounded-xl hover:bg-amber-800 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-amber-700 transition-colors shadow-sm"
+        >
+          注册并登录
+        </button>
+
       </form>
     </section>
   </div>

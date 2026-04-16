@@ -7,7 +7,7 @@
   {% if last_stage_stage %}
     <aside class="tocu-resume-card">
       <div>
-        <p class="tocu-resume-card__eyebrow">Resume Where You Left Off</p>
+
         <h2 class="tocu-resume-card__title">继续上次进度</h2>
         <p class="tocu-resume-card__body">上次看到：{{ last_stage_stage.title }}</p>
       </div>
@@ -19,12 +19,12 @@
     {% for stage in stages %}
       <article class="tocu-stage-card {% if last_stage_slug == stage.slug %}is-highlighted{% endif %}">
         <div class="tocu-stage-card__meta">
-          <span class="tocu-stage-card__index">Stage {{ "%02d"|format(loop.index) }}</span>
+          <span class="tocu-stage-card__index">步骤 {{ "%2d"|format(loop.index) }}</span>
           <span class="tocu-stage-card__range">{{ stage.month_range }}</span>
         </div>
         <h2 class="tocu-stage-card__title">{{ stage.title }}</h2>
         <p class="tocu-stage-card__body">{{ stage.description }}</p>
-        <a href="{{ url_for('guide', stage_slug=stage.slug) }}" class="tocu-stage-card__cta">进入阶段</a>
+         <a href="{{ url_for('guide', stage_slug=stage.slug) }}" class="tocu-btn tocu-btn--dark tocu-btn--small">进入阶段</a>
       </article>
     {% endfor %}
   </div>

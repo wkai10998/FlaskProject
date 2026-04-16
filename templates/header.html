@@ -1,8 +1,7 @@
 <header class="tocu-site-header {% if request.path.startswith('/assistant') %}tocu-site-header--assistant{% endif %}">
   <div class="tocu-site-header__inner">
     <a href="{{ url_for('index') }}" class="tocu-site-header__brand">
-      <span class="tocu-site-header__mark">ToCU</span>
-      <span class="tocu-site-header__subtitle">CUHK Master's Application Companion</span>
+      <img src="{{ url_for('static', filename='images/logo.png') }}" alt="ToCU" class="tocu-site-header__logo">
     </a>
 
     <nav class="tocu-site-nav" aria-label="主导航">
