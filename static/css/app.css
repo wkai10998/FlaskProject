@@ -461,6 +461,18 @@ code {
   line-height: 1.12;
 }
 
+.tocu-page-hero--detail {
+  padding: 0 0 0.25rem;
+}
+
+.tocu-page-hero--detail .tocu-page-hero__title {
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+}
+
+.tocu-page-hero--detail .tocu-page-hero__badge {
+  display: none;
+}
+
 .tocu-page-hero__summary {
   max-width: 48rem;
   margin: 0.9rem 0 0;
