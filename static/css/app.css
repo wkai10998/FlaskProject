@@ -1690,6 +1690,29 @@ body.tocu-body--assistant {
     white-space: nowrap;
   }
 
+  .tocu-btn--mobile-arrow {
+    position: relative;
+    min-height: 34px;
+    width: 44px;
+    min-width: 44px;
+    padding: var(--tocu-space-xs-plus) var(--tocu-space-md-minus);
+    font-size: 0;
+    line-height: 0;
+    text-indent: -9999px;
+    overflow: hidden;
+  }
+
+  .tocu-btn--mobile-arrow::before {
+    content: "→";
+    position: absolute;
+    inset: 0;
+    display: grid;
+    place-items: center;
+    font-size: 1rem;
+    line-height: 1;
+    text-indent: 0;
+  }
+
   .tocu-user-menu__name {
     display: none;
   }
@@ -1814,17 +1837,9 @@ body.tocu-body--assistant {
   }
 
   .tocu-btn--mobile-arrow {
-    min-height: 34px;
-    min-width: 44px;
-    padding: var(--tocu-space-xs-plus) var(--tocu-space-md-minus);
-    font-size: 0;
-    line-height: 0;
-  }
-
-  .tocu-btn--mobile-arrow::before {
-    content: "→";
-    font-size: 1rem;
-    line-height: 1;
+    min-height: 32px;
+    width: 42px;
+    min-width: 42px;
   }
 
   .tocu-directory-card__title {
