@@ -1,17 +1,24 @@
 from __future__ import annotations
 
-import json
 import os
 import socket
-import time
-import urllib.error
-import urllib.request
 from typing import Any
+
+try:
+    import httpx
+except ImportError:  # pragma: no cover - exercised in unit tests via monkeypatch
+    httpx = None  # type: ignore[assignment]
+
+try:
+    import zai
+    from zai import ZhipuAiClient
+except ImportError:  # pragma: no cover - exercised in unit tests via monkeypatch
+    zai = None  # type: ignore[assignment]
+    ZhipuAiClient = None  # type: ignore[assignment]
 
 DEFAULT_ZHIPU_TIMEOUT_SECONDS = 22
 DEFAULT_ZHIPU_CHAT_MAX_TOKENS = 512
 DEFAULT_ZHIPU_CHAT_RETRIES = 1
-DEFAULT_ZHIPU_RETRY_DELAY_SECONDS = 0.35
 ZHIPU_BASE_URL = "https://open.bigmodel.cn/api/paas/v4"
 
 
@@ -66,43 +73,66 @@ def _get_chat_retries() -> int:
     return max(0, min(2, value))
 
 
-def _post_json(path: str, payload: dict[str, Any], retries: int = 0) -> dict[str, Any]:
+def _get_timeout_config() -> Any:
+    timeout_seconds = _get_timeout_seconds()
+    if httpx is None:
+        return timeout_seconds
+    return httpx.Timeout(timeout=timeout_seconds, connect=min(timeout_seconds, 8.0))
+
+
+def _get_timeout_error_types() -> tuple[type[BaseException], ...]:
+    timeout_types: list[type[BaseException]] = [TimeoutError, socket.timeout]
+    if zai is not None:
+        timeout_error = getattr(getattr(zai, "core", None), "APITimeoutError", None)
+        if isinstance(timeout_error, type):
+            timeout_types.append(timeout_error)
+    return tuple(timeout_types)
+
+
+def _raise_sdk_runtime_error(err: Exception) -> None:
+    if isinstance(err, _get_timeout_error_types()):
+        raise RuntimeError("智谱 API 请求超时，请稍后重试。") from err
+
+    response = getattr(err, "response", None)
+    status_code = getattr(err, "status_code", None) or getattr(response, "status_code", None)
+    response_text = getattr(response, "text", None)
+    if status_code:
+        detail = response_text or str(err)
+        raise RuntimeError(f"智谱 API 调用失败（HTTP {status_code}）：{detail}") from err
+
+    raise RuntimeError("智谱 API 调用失败，请检查网络或 API Key 配置。") from err
+
+
+def _create_client(max_retries: int = 0) -> Any:
     config = _get_config()
     if not config["api_key"]:
         raise RuntimeError("ZHIPU_API_KEY 未配置。")
+    if ZhipuAiClient is None:
+        raise RuntimeError("未安装智谱官方 Python SDK，请先执行 `pip install zai-sdk==0.2.2`。")
 
-    body = json.dumps(payload, ensure_ascii=False).encode("utf-8")
-    url = f"{config['base_url']}/{path.lstrip('/')}"
-    headers = {
-        "Authorization": f"Bearer {config['api_key']}",
-        "Content-Type": "application/json",
-    }
-    request_obj = urllib.request.Request(url, data=body, headers=headers, method="POST")
+    return ZhipuAiClient(
+        api_key=config["api_key"],
+        base_url=config["base_url"],
+        timeout=_get_timeout_config(),
+        max_retries=max(0, max_retries),
+    )
 
-    max_attempts = max(1, retries + 1)
-    timeout_seconds = _get_timeout_seconds()
-    last_err: Exception | None = None
-    for attempt in range(max_attempts):
-        try:
-            with urllib.request.urlopen(request_obj, timeout=timeout_seconds) as response:
-                data = json.loads(response.read().decode("utf-8"))
-            if not isinstance(data, dict):
-                raise RuntimeError("智谱 API 返回格式异常。")
-            return data
-        except urllib.error.HTTPError as err:
-            error_text = err.read().decode("utf-8", errors="ignore")
-            raise RuntimeError(f"智谱 API 调用失败（HTTP {err.code}）：{error_text}") from err
-        except (TimeoutError, socket.timeout, urllib.error.URLError) as err:
-            last_err = err
-            if attempt < max_attempts - 1:
-                time.sleep(DEFAULT_ZHIPU_RETRY_DELAY_SECONDS)
-                continue
-        except json.JSONDecodeError as err:
-            raise RuntimeError("智谱 API 调用失败，返回内容无法解析。") from err
 
-    if isinstance(last_err, (TimeoutError, socket.timeout)):
-        raise RuntimeError("智谱 API 请求超时，请稍后重试。") from last_err
-    raise RuntimeError("智谱 API 调用失败，请检查网络或 API Key 配置。") from last_err
+def _extract_message_text(content: Any) -> str:
+    if isinstance(content, str):
+        return content.strip()
+    if not isinstance(content, list):
+        return ""
+
+    parts: list[str] = []
+    for item in content:
+        if isinstance(item, dict):
+            text = item.get("text", "")
+        else:
+            text = getattr(item, "text", "")
+        if isinstance(text, str) and text:
+            parts.append(text)
+    return "".join(parts).strip()
 
 
 def create_embeddings(texts: list[str], dimensions: int | None = None) -> list[list[float]]:
@@ -119,20 +149,22 @@ def create_embeddings(texts: list[str], dimensions: int | None = None) -> list[l
     if dimensions is not None:
         payload["dimensions"] = dimensions
 
-    data = _post_json("embeddings", payload)
-    rows = data.get("data", [])
+    client = _create_client()
+    try:
+        response = client.embeddings.create(**payload)
+    except Exception as err:
+        _raise_sdk_runtime_error(err)
+
+    rows = getattr(response, "data", [])
     if not isinstance(rows, list):
         raise RuntimeError("智谱 embedding 返回数据异常。")
 
     vectors: list[list[float]] = []
     for row in rows:
-        if not isinstance(row, dict):
-            continue
-        embedding = row.get("embedding")
+        embedding = getattr(row, "embedding", None)
         if not isinstance(embedding, list):
             continue
-        vector = [float(value) for value in embedding]
-        vectors.append(vector)
+        vectors.append([float(value) for value in embedding])
 
     if len(vectors) != len(texts):
         raise RuntimeError("embedding 返回条数与输入不一致。")
@@ -141,28 +173,31 @@ def create_embeddings(texts: list[str], dimensions: int | None = None) -> list[l
 
 def generate_answer(system_prompt: str, user_prompt: str, temperature: float = 0.2) -> str:
     config = _get_config()
-    payload: dict[str, Any] = {
-        "model": config["chat_model"],
-        "messages": [
-            {"role": "system", "content": system_prompt},
-            {"role": "user", "content": user_prompt},
-        ],
-        "temperature": temperature,
-        "max_tokens": _get_chat_max_tokens(),
-    }
-    data = _post_json("chat/completions", payload, retries=_get_chat_retries())
+    client = _create_client(max_retries=_get_chat_retries())
 
-    choices = data.get("choices", [])
+    try:
+        response = client.chat.completions.create(
+            model=config["chat_model"],
+            messages=[
+                {"role": "system", "content": system_prompt},
+                {"role": "user", "content": user_prompt},
+            ],
+            temperature=temperature,
+            max_tokens=_get_chat_max_tokens(),
+        )
+    except Exception as err:
+        _raise_sdk_runtime_error(err)
+
+    choices = getattr(response, "choices", [])
     if not isinstance(choices, list) or not choices:
         raise RuntimeError("智谱对话模型返回为空。")
 
     first = choices[0]
-    if not isinstance(first, dict):
-        raise RuntimeError("智谱对话模型返回格式异常。")
-    message = first.get("message", {})
-    if not isinstance(message, dict):
+    message = getattr(first, "message", None)
+    if message is None:
         raise RuntimeError("智谱对话模型返回 message 异常。")
-    content = message.get("content", "")
-    if not isinstance(content, str) or not content.strip():
+
+    content = _extract_message_text(getattr(message, "content", ""))
+    if not content:
         raise RuntimeError("智谱对话模型未返回有效文本。")
-    return content.strip()
+    return content
