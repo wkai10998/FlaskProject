@@ -1,42 +1,42 @@
 [
   {
     "slug": "prep",
-    "title": "申请前准备（2.1+2.2）",
+    "title": "申请前准备",
     "month": "申请季前",
     "month_range": "申请季前",
     "description": "整合官网规则、材料清单与术语解释，先把申请标准和口径统一。"
   },
   {
     "slug": "docs",
-    "title": "网申阶段（2.3）",
+    "title": "网申阶段",
     "month": "9-12月",
     "month_range": "9月至12月",
     "description": "按系统页面顺序完成 Step 1-11，从注册到缴费提交。"
   },
   {
     "slug": "apply",
-    "title": "申请材料寄送（2.4）",
+    "title": "申请材料寄送",
     "month": "10-12月",
     "month_range": "10月至12月",
     "description": "按项目要求准备并寄送纸质材料，确保在截止日前送达。"
   },
   {
     "slug": "fill",
-    "title": "申请积极信号（2.5）",
+    "title": "申请积极信号",
     "month": "提交后",
     "month_range": "提交后至放榜前",
     "description": "识别系统状态和三锁信号，及时采取补件或跟进动作。"
   },
   {
     "slug": "submit",
-    "title": "缴纳留位费（2.6）",
+    "title": "缴纳留位费",
     "month": "收到Offer后",
     "month_range": "收到 Offer 后 2-4 周",
     "description": "按 Offer 要求完成留位费缴纳和凭证上传，锁定入学名额。"
   },
   {
     "slug": "wait",
-    "title": "入学前准备（2.7）",
+    "title": "入学前准备",
     "month": "开学前",
     "month_range": "开学前 1-2 个月",
     "description": "办理签证与证件、住宿与开户、学历验证等入学事项。"
