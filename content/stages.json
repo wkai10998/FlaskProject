@@ -4,7 +4,7 @@
     "title": "申请前准备",
     "month": "申请季前",
     "month_range": "申请季前",
-    "description": "整合官网规则、材料清单与术语解释，先把申请标准和口径统一。"
+    "description": "整合官网规则、材料清单与术语解释。"
   },
   {
     "slug": "docs",
@@ -30,7 +30,7 @@
   {
     "slug": "submit",
     "title": "缴纳留位费",
-    "month": "收到Offer后",
+    "month": "收到 Offer 后",
     "month_range": "收到 Offer 后 2-4 周",
     "description": "按 Offer 要求完成留位费缴纳和凭证上传，锁定入学名额。"
   },

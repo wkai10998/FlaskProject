@@ -1,0 +1,118 @@
+[1mdiff --git a/content/guide_steps.json b/content/guide_steps.json[m
+[1mindex ed87a22..452336f 100644[m
+[1m--- a/content/guide_steps.json[m
+[1m+++ b/content/guide_steps.json[m
+[36m@@ -194,13 +194,19 @@[m
+         "title": "专业资格",[m
+         "image": "guides/cuhk_step06_qualification.jpeg",[m
+         "tutorial": [[m
+[31m-          "1.如有资格证书，填写证书名称、机构和获得日期。",[m
+[31m-          "2.多项证书可逐条添加。",[m
+[31m-          "3.无证书可选 No 跳过。"[m
+[32m+[m[32m          "1. 选择是否拥有专业资格证书（Do you have professional qualification?）",[m
+[32m+[m[32m          "2. 如选Yes，填写资格证书名称（如CPA, CFA, 教师资格证等）",[m
+[32m+[m[32m          "3. 填写颁发机构名称（Issuing Authority）",[m
+[32m+[m[32m          "4. 填写获得日期（Date Obtained）",[m
+[32m+[m[32m          "5. 如有多项资格，点击Add More添加",[m
+[32m+[m[32m          "6. 如没有专业资格证书，选No即可跳过此步骤",[m
+[32m+[m[32m          "7. 点击 Save and Next 继续"[m
+         ],[m
+         "notes": [[m
+[31m-          "1.商科方向证书（CPA/CFA/ACCA）通常有加分效果。",[m
+[31m-          "2.证书名称建议使用官方英文。"[m
+[32m+[m[32m          "1. 教师资格证、计算机等级证、专业英语考级证书、普通话等级证书等与职业专业相关的资格证书都可以填写。",[m
+[32m+[m[32m          "2. 如没有专业资格证书，选No即可跳过此步骤，不影响申请。",[m
+[32m+[m[32m          "3. CPA、CFA、ACCA 等金融/会计类证书对商科申请有加分作用。",[m
+[32m+[m[32m          "4. 证书名称需使用官方英文名称。"[m
+         ],[m
+         "materials": [[m
+           "证书名称与机构准确",[m
+[36m@@ -213,13 +219,21 @@[m
+         "title": "工作经验",[m
+         "image": "guides/cuhk_step07_experience.jpeg",[m
+         "tutorial": [[m
+[31m-          "1.填写公司/机构、岗位、时间范围与职责。",[m
+[31m-          "2.按时间倒序整理经历并突出成果。",[m
+[31m-          "3.无工作经验可选 No（需先确认项目要求）。"[m
+[32m+[m[32m          "1. 选择是否有实习或全职工作经历（Do you have internship or post-qualification working experience?）",[m
+[32m+[m[32m          "2. 如选Yes，填写公司/机构名称（Company/Organization Name）",[m
+[32m+[m[32m          "3. 填写职位名称（Job Title）",[m
+[32m+[m[32m          "4. 填写工作起止时间（From - To）",[m
+[32m+[m[32m          "5. 填写工作职责简述（Job Description）",[m
+[32m+[m[32m          "6. 如有多段经历，点击Add More添加",[m
+[32m+[m[32m          "7. 如没有工作经验，选No即可跳过",[m
+[32m+[m[32m          "8. 点击 Save and Next 继续"[m
+         ],[m
+         "notes": [[m
+[31m-          "1.MBA/EMBA 常有工作年限要求。",[m
+[31m-          "2.描述建议突出与申请专业的相关性。"[m
+[32m+[m[32m          "1. 实习经历和全职工作经历都可以填写。",[m
+[32m+[m[32m          "2. 工作职责描述建议简洁明了，突出与申请专业相关的内容。",[m
+[32m+[m[32m          "3. 如没有工作经验，选No即可跳过，不影响申请（除非项目有明确要求）。",[m
+[32m+[m[32m          "4. 部分项目（如 MBA、EMBA）对工作经验有明确要求（通常3-5年以上）。",[m
+[32m+[m[32m          "5. 建议按时间倒序填写（最近的经历排在前面）。"[m
+         ],[m
+         "materials": [[m
+           "岗位职责与时间完整",[m
+[36m@@ -232,13 +246,24 @@[m
+         "title": "上传支持文件",[m
+         "image": "guides/cuhk_step08_upload.jpeg",[m
+         "tutorial": [[m
+[31m-          "1.上传学历证书、成绩单、语言成绩、推荐信、身份证明等。",[m
+[31m-          "2.统一采用清晰 PDF，并检查文件大小限制。",[m
+[31m-          "3.逐项确认 required 项状态为完成。"[m
+[32m+[m[32m          "1. 上传学位证/毕业证扫描件（Copies of certificates of academic/professional qualifications）",[m
+[32m+[m[32m          "2. 上传官方成绩单扫描件（Copies of official transcripts and grading schemes of all tertiary level studies）",[m
+[32m+[m[32m          "3. 上传语言成绩单扫描件（Proof of English language proficiency）",[m
+[32m+[m[32m          "4. 上传推荐信（Confidential recommendations/referee's report，通常2封）",[m
+[32m+[m[32m          "5. 上传身份证/护照扫描件（A photocopy of Hong Kong Identity card or other identity document）",[m
+[32m+[m[32m          "6. 上传 HKCAAVQ 评估报告（如需要）",[m
+[32m+[m[32m          "7. 上传其他项目要求的特定材料",[m
+[32m+[m[32m          "8. 所有文件上传完毕后点击 Save and Next 继续"[m
+         ],[m
+         "notes": [[m
+[31m-          "1.材料真实性与完整性直接影响审核效率。",[m
+[31m-          "2.建议上传后再下载抽检一轮。"[m
+[32m+[m[32m          "1. 所有文件建议扫描为 PDF 格式，确保清晰可读。",[m
+[32m+[m[32m          "2. 文件大小通常有限制（一般不超过 1MB/文件，具体以系统提示为准）。",[m
+[32m+[m[32m          "3. 成绩单必须是官方版本，密封盖章。",[m
+[32m+[m[32m          "4. 内地学位需提供学信网验证报告。",[m
+[32m+[m[32m          "5. 从 2025-26 起，录取后需在开学前一个月内完成学历验证（如学信网/CSCSE验证），否则可能延期入学。",[m
+[32m+[m[32m          "6. 推荐信需提前与推荐人沟通好内容和提交时间。",[m
+[32m+[m[32m          "7. 所有提交的文件不会退还，申请不成功则所有文件将被销毁。",[m
+[32m+[m[32m          "8. 如提交虚假文件，将取消申请资格和后续入学资格，已缴费用不退还。"[m
+         ],[m
+         "materials": [[m
+           "必传材料已全部上传",[m
+[36m@@ -251,13 +276,16 @@[m
+         "title": "问卷调查",[m
+         "image": "guides/cuhk_step09_survey.jpeg",[m
+         "tutorial": [[m
+[31m-          "1.按实际情况填写调查问卷。",[m
+[31m-          "2.常见问题包含信息来源与项目认知。",[m
+[31m-          "3.保存后进入下一步。"[m
+[32m+[m[32m          "1. 回答学校设置的调查问卷",[m
+[32m+[m[32m          "2. 常见问题：你是如何了解到该项目的？（How did you learn about this programme?）选项通常包括：University Website / Education Fair / Friends / Social Media / Agents / Others",[m
+[32m+[m[32m          "3. 可能包括：你为什么选择港中文？（Why CUHK?）",[m
+[32m+[m[32m          "4. 根据实际情况如实选择即可",[m
+[32m+[m[32m          "5. 点击 Save and Next 继续"[m
+         ],[m
+         "notes": [[m
+[31m-          "1.通常不直接决定录取，但建议认真填写。",[m
+[31m-          "2.答案应与申请材料整体口径一致。"[m
+[32m+[m[32m          "1. Survey 部分通常不影响录取结果，主要用于学校的市场调研和数据统计。",[m
+[32m+[m[32m          "2. 但仍建议认真填写，展示你对项目的了解和诚意。",[m
+[32m+[m[32m          "3. 如实填写即可，不需要过度包装。"[m
+         ],[m
+         "materials": [[m
+           "问卷答案与实际一致",[m
+[36m@@ -269,13 +297,17 @@[m
+         "title": "申请声明",[m
+         "image": "guides/cuhk_step10_declaration.jpeg",[m
+         "tutorial": [[m
+[31m-          "1.阅读信息真实性与隐私使用条款。",[m
+[31m-          "2.提交前进行最后核对。",[m
+[31m-          "3.勾选同意声明并保存。"[m
+[32m+[m[32m          "1. 仔细阅读申请声明条款（包括信息真实性声明、隐私政策等）",[m
+[32m+[m[32m          "2. 确认所填信息真实、准确、完整",[m
+[32m+[m[32m          "3. 确认了解虚假信息将

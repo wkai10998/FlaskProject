@@ -972,6 +972,13 @@ code {
   background: var(--tocu-border-strong);
 }
 
+.tocu-guide-main__image[src*="cuhk_step"] {
+  width: 100%;
+  height: auto;
+  aspect-ratio: auto;
+  object-fit: contain;
+}
+
 .tocu-guide-main__section {
   margin-top: var(--tocu-space-page-gap);
 }
